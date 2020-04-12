@@ -1,0 +1,158 @@
+# Database name.
+database: reborn.db
+
+# Command prefix.
+prefix: ";"
+
+# Logs directory.
+logs_dir: "logs/"
+
+# Database backup directory.
+db_backup_dir: "backups"
+
+# Interval for backing up the database
+db_backup_time: 36e5
+
+# Number of repeats before they get muted
+repeat_felon_count: 3
+
+# Auto close warrant interval in ms.
+auto_close_warrant_interval: 3e5
+
+# Auto set case to inactive interval.
+auto_set_inactive_case_interval: 3e5
+
+# When the warrant closes after its been issued
+auto_close_warrant: 1728e5
+
+# Interval for checking for finished verdicts.
+auto_verdict_time: 3e5
+
+# Interval for when the bot auto unmutes
+auto_unmute: 3e5
+
+# Interval for when the bot automatically checks giveaways
+auto_giveaway: 1e3
+
+# Interval for cleansing the server
+auto_cleanse: 3e5
+
+# Interval for setting laws to be active
+active_law: 6e4
+
+# Time when the detain needs to be approved
+detain_approved: 3e4
+
+# Interval for remind chiefs to nominate more people
+auto_dm_nominations: 6e4
+
+# Time until verification is denied in ms.
+verify_timeout: 6e4
+
+# Time units
+time_units: {
+  m: 6e4,
+  h: 36e5,
+  d: 864e5,
+  w: 6048e5
+}
+
+restart: git pull && pm2 restart 0
+
+# When to replace the old db backup (ms)
+db_previous_time: 6048e5
+
+# Additional money granted to the lawyer if they get an not guilty verdict
+lawyer_innocence_bonus: 1
+
+# Time that a lawyer has to accept the request
+lawyer_accept_time: 3e5
+
+auto_lawyer_accept_time: 6e8
+
+# Interval when auto laywer is picked
+auto_pick_lawyer_time: 15e4
+
+# Percent used to calculate what is too large based off of the current economy
+max_money_percent: 0.25
+
+# Number of times a user can change their lawyer (doesn't account for auto lawyer due to no plea/lawyer)
+lawyer_change_count: 3
+
+# When a lawyer gets auto picked in minutes
+auto_pick_lawyer: 15
+
+# Money multiplier for Congress when they send a valid message
+congress_cpm_multiplier: 8
+
+# Money given to congress members after an impeachment
+congress_impeachment_check: 1e3
+
+# Money taken away from the chief when a member of their branch is impeached
+chief_impeached_deduction: -2e3
+
+# Minimum cash required for gambling
+min_gamble: 2.50
+
+# Minimum cash that can be transfered
+min_transfer: 5
+
+# Transaction fee when transferring
+transaction_fee: 0.1
+
+# Time when the law will be considered in place
+law_in_effect: 864e5
+
+# Innoncence bias reward
+innocence_bias: 0.3
+
+# Time in weeks a user cant receive a gov role after being impeached
+impeachment_time: 1
+
+# Number of members to display in the leaderboard
+leaderboard: 10
+
+# Number of members to display in the lawyers leaderboard
+lawyer_leaderboard: 10
+
+# Minimum win percent for a lawyer to be displayed on the lawyers leaderboard
+min_lawyer_win_percent: 0.75
+
+# Max lawyer rate
+max_lawyer_rate: 5e3
+
+# Max number of active cases a lawyer can have at once
+max_active_lawyer_cases: 2
+
+# The minimum amount of cash that is considered not in-debt
+in_debt: 0
+
+# Amount given for finishing a case
+judge_case: 1e3
+
+# Amount given to the approving judge if the case leads to a guilty verdict
+guilty_granted_warrant: 250
+
+# Amount given to the cop if the case leads to a guilty verdict
+guilty_arrest: 500
+
+# Amount given to the approving judge if the case leads to a guilty verdict
+not_guilty_granted_warrant: -1500
+
+# Amount given to the cop if the case leads to a guilty verdict
+not_guilty_arrest: -1500
+
+# Amount given if one gets impeached
+impeached: -2e3
+
+# Amount given per message
+cash_per_msg: 0.25
+
+# Cooldown for chat cash
+msg_cooldown: 3e4
+
+# Cooldown for chat giveaway entry
+msg_giveaway_cooldown: 6e4
+
+# Minimum character to get cash (Message is sanitized for links, emojis, and mentions)
+min_msg_length: 7

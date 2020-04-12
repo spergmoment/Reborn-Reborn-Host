@@ -1,0 +1,290 @@
+laws_table: |-
+  CREATE TABLE IF NOT EXISTS laws (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    content TEXT NOT NULL,
+    mandatory_felony TINYINT NOT NULL DEFAULT 0,
+    min_verdict INTEGER,
+    max_verdict INTEGER,
+    active TINYINT NOT NULL DEFAULT 1,
+    in_effect TINYINT NOT NULL DEFAULT 0,
+    edited_at INTEGER
+  )
+
+warrants_table: |-
+  CREATE TABLE IF NOT EXISTS warrants (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    law_id INTEGER NOT NULL REFERENCES laws(id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    defendant_id TEXT NOT NULL,
+    judge_id TEXT,
+    officer_id TEXT,
+    evidence TEXT,
+    extended_time TINYINT NOT NULL DEFAULT 0,
+    request TINYINT NOT NULL DEFAULT 0,
+    approved TINYINT NOT NULL DEFAULT 0,
+    executed TINYINT NOT NULL DEFAULT 0
+  )
+
+lawyers_table: |-
+  CREATE TABLE IF NOT EXISTS lawyers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id NOT NULL,
+    guild_id NOT NULL REFERENCES guilds(guild_id),
+    rate INTEGER NOT NULL DEFAULT 0,
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    active TINYINT NOT NULL DEFAULT 0
+  )
+
+fired_case_lawyers_table: |-
+  CREATE TABLE IF NOT EXISTS fired_case_lawyers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    member_id TEXT NOT NULL,
+    case_id INTEGER NOT NULL REFERENCES cases(id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL
+  )
+
+cases_table: |-
+  CREATE TABLE IF NOT EXISTS cases (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    warrant_id INTEGER NOT NULL REFERENCES warrants(id),
+    law_id INTEGER NOT NULL REFERENCES laws(id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    channel_id TEXT NOT NULL,
+    defendant_id TEXT NOT NULL,
+    judge_id TEXT NOT NULL,
+    plaintiff_id TEXT NOT NULL,
+    lawyer_id TEXT,
+    lawyer_hired_at INTEGER,
+    plea TINYINT,
+    cost INTEGER NOT NULL DEFAULT 0,
+    request TINYINT NOT NULL DEFAULT 2,
+    inactive_count TINYINT NOT NULL DEFAULT 0,
+    lawyer_count INTEGER NOT NULL DEFAULT 0,
+    def_left TINYINT NOT NULL DEFAULT 0,
+    lawyer_state TINYINT NOT NULL DEFAULT 0
+  )
+
+verdicts_table: |-
+  CREATE TABLE IF NOT EXISTS verdicts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    case_id INTEGER NOT NULL REFERENCES cases(id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    defendant_id TEXT NOT NULL,
+    verdict TINYINT DEFAULT 0,
+    opinion STRING,
+    sentence INTEGER,
+    served TINYINT DEFAULT 0
+  )
+
+guilds_table: |-
+  CREATE TABLE IF NOT EXISTS guilds (
+    guild_id TEXT PRIMARY KEY,
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    officer_role TEXT,
+    judge_role TEXT,
+    jailed_role TEXT,
+    trial_role TEXT,
+    congress_role TEXT,
+    congress_channel TEXT,
+    imprisoned_role TEXT,
+    chief_justice_role TEXT,
+    chief_officer_role TEXT,
+    house_speaker_role TEXT,
+    court_category TEXT,
+    law_channel TEXT,
+    giveaway_channel TEXT,
+    warrant_channel TEXT,
+    case_channel TEXT,
+    audit_channel TEXT,
+    giveaway_timer INTEGER DEFAULT 0,
+    giveaway_link TEXT,
+    announcement_channel TEXT,
+    cleanse TINYINT DEFAULT 0
+  )
+
+nominations_table: |-
+  CREATE TABLE IF NOT EXISTS nominations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    nominator TEXT NOT NULL,
+    nominatee TEXT NOT NULL,
+    branch TINYINT NOT NULL,
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL
+  )
+
+notifications_table: |-
+  CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    member_id TEXT NOT NULL,
+    type TINYINT NOT NULL,
+    last_notified INTEGER,
+    last_dm INTEGER,
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL
+  )
+
+public_channels_table: |-
+  CREATE TABLE IF NOT EXISTS public_channels (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    channel_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    active TINYINT NOT NULL DEFAULT 1
+  )
+
+members_table: |-
+  CREATE TABLE IF NOT EXISTS members (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    member_id TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL,
+    cash INTEGER NOT NULL DEFAULT 0,
+    jailed TINYINT NOT NULL DEFAULT 0
+  )
+
+impeachments_table: |-
+  CREATE TABLE IF NOT EXISTS impeachments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL REFERENCES guilds(guild_id),
+    created_at INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL
+  )
+
+exists: SELECT EXISTS(SELECT 1 FROM {0} WHERE {1} = {2} LIMIT 1)
+
+select: SELECT * FROM {0} WHERE guild_id = ?
+
+insert: INSERT INTO {0}({1}) VALUES({2}) ON CONFLICT DO NOTHING
+
+upsert: INSERT INTO {0}({1}) VALUES({2}) ON CONFLICT(guild_id) DO UPDATE SET {3}
+
+get_last_sequence: SELECT * FROM sqlite_sequence WHERE name = ?
+
+add_cash: UPDATE members SET cash = cash + ? WHERE member_id = ? AND guild_id = ?
+
+set_cash: UPDATE members SET cash = ? WHERE member_id = ? AND guild_id = ?
+
+reset_server: UPDATE members SET cash = 0 WHERE guild_id = ?
+
+reset_server_rate: UPDATE lawyers SET rate = 0 WHERE guild_id = ?
+
+reset_user: UPDATE members SET cash = 0 WHERE member_id = ? AND guild_id = ?
+
+reset_user_rate: UPDATE lawyers SET rate = 0 WHERE member_id = ? AND guild_id = ?
+
+set_law_edited_at: UPDATE laws SET edited_at = ? WHERE id = ?
+
+update_lawyer_count: UPDATE cases SET lawyer_count = ? WHERE id = ?
+
+set_def_case_left: UPDATE cases SET def_left = 1 WHERE id = ?
+
+set_lawyer_state: UPDATE cases SET lawyer_state = ? WHERE id = ?
+
+set_case_lawyer: UPDATE cases SET lawyer_id = ?, lawyer_hired_at = ?, request = ? WHERE id = ?
+
+set_case_cost: UPDATE cases SET cost = ? WHERE id = ?
+
+set_case_plea: UPDATE cases SET plea = ? WHERE id = ?
+
+get_lawyer: SELECT * FROM lawyers WHERE member_id = ? AND guild_id = ?
+
+get_fired_lawyers: SELECT * FROM fired_case_lawyers WHERE case_id = ?
+
+set_lawyer_rate: UPDATE lawyers SET rate = ?, active = 1 WHERE member_id = ? AND guild_id = ?
+
+set_active_lawyer: UPDATE lawyers SET active = 1 WHERE member_id = ? AND guild_id = ?
+
+set_inactive_lawyer: UPDATE lawyers SET active = 0 WHERE member_id = ? AND guild_id = ?
+
+get_guild_lawyers: SELECT * FROM lawyers WHERE guild_id = ?
+
+set_law_created_at: UPDATE laws SET created_at = ? WHERE id = ?
+
+update_law_description: UPDATE laws SET content = ? WHERE id = ?
+
+set_law_in_effect: UPDATE laws SET in_effect = 1 WHERE id = ?
+
+set_last_notified: UPDATE notifications SET last_notified = ? WHERE member_id = ? AND guild_id = ? AND type = ?
+
+set_last_dm: UPDATE notifications SET last_dm = ? WHERE member_id = ? AND guild_id = ? AND type = ?
+
+set_last_active: UPDATE notifications SET last_modified_at = ? WHERE member_id = ? AND guild_id = ? AND type = ?
+
+get_notification: SELECT * FROM notifications WHERE member_id = ? AND guild_id = ? AND type = ?
+
+select_nominations: SELECT * FROM nominations WHERE guild_id = ?
+
+select_nominator_nominations: SELECT * FROM nominations WHERE nominator = ? AND guild_id = ?
+
+remove_channel: UPDATE public_channels SET active = 0 WHERE channel_id = ?
+
+select_channels: SELECT * FROM public_channels WHERE guild_id = ?
+
+serve_verdict: UPDATE verdicts SET served = 1 WHERE id = ?
+
+set_jailed: UPDATE members SET jailed = ? WHERE member_id = ? AND guild_id = ?
+
+set_giveaway_timer: UPDATE guilds SET giveaway_timer = ? WHERE guild_id = ?
+
+set_giveaway_link: UPDATE guilds SET giveaway_link = ? WHERE guild_id = ?
+
+get_member: SELECT * FROM members WHERE member_id = ? AND guild_id = ?
+
+get_guild_members: SELECT * FROM members WHERE guild_id = ?
+
+close_case: UPDATE verdicts SET verdict = 0 WHERE id = ?
+
+close_warrant: UPDATE warrants SET executed = 1 WHERE id = ?
+
+approve_warrant: UPDATE warrants SET approved = 1, judge_id = ? WHERE id = ?
+
+set_min_verdict: UPDATE laws SET min_verdict = ? WHERE id = ?
+
+set_max_verdict: UPDATE laws SET max_verdict = ? WHERE id = ?
+
+close_law: UPDATE laws SET active = 0 WHERE id = ?
+
+set_case_inactive_count: UPDATE cases SET inactive_count = ? WHERE id = ?
+
+select_channel_case: SELECT * FROM cases WHERE channel_id = ?
+
+select_cases: SELECT * FROM cases WHERE guild_id = ?
+
+select_case: SELECT * FROM cases WHERE id = ?
+
+select_laws: SELECT * FROM laws WHERE guild_id = ?
+
+select_law: SELECT * FROM laws WHERE id = ?
+
+select_warrants: SELECT * FROM warrants WHERE guild_id = ?
+
+select_warrant: SELECT * FROM warrants WHERE id = ?
+
+select_member_verdicts: SELECT * FROM verdicts WHERE guild_id = ? AND defendant_id = ?
+
+select_verdicts: SELECT * FROM verdicts WHERE guild_id = ?
+
+select_verdict: SELECT * FROM verdicts WHERE case_id = ?
+
+select_impeachment: SELECT * FROM impeachments WHERE guild_id = ? AND member_id = ?
+
+update_impeachment: UPDATE impeachments SET last_modified_at = ? WHERE guild_id = ? AND member_id = ?

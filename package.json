@@ -1,0 +1,38 @@
+{
+  "name": "reborn",
+  "version": "0.1.0",
+  "author": "John Boyer",
+  "license": "AGPL-3.0-or-later",
+  "description": "The core control of the only truly free and fair discord server.",
+  "dependencies": {
+    "better-sqlite3": "^5.4.3",
+    "eris": "^0.10.1",
+    "js-yaml": "^3.13.1",
+    "node-fetch": "^2.6.0",
+    "node-gyp": "^5.0.3",
+    "patron.js": "git://github.com/LJNeon/patron.git#f5ab87ac44aab21a17b1da7244faa9c24568eddd",
+    "ws": "^7.0.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1",
+    "pako": "^1.0.10"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  },
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "run": "node src/index.js",
+    "lint": "node_modules/.bin/eslint ./src/** --ext .js",
+    "test": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Asshley/reborn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Asshley/reborn/issues"
+  },
+  "homepage": "https://github.com/Asshley/reborn#readme"
+}

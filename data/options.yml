@@ -1,0 +1,32 @@
+# Eris client options. See more at: https://abal.moe/Eris/docs/Client
+client: {
+  compress: true,
+  disableEveryone: false,
+  defaultImageFormat: "png",
+  defaultImageSize: 256,
+  disableEvents: {
+    TYPING_START: true,
+    VOICE_STATE_UPDATE: true
+  },
+  getAllUsers: true,
+  latencyThreshold: 1e3,
+  restMode: true
+}
+
+# patron.js default Command options. See more at: https://LJNeon.github.io/patron.js/global.html#CommandOptions
+command: {
+  botPermissions: ["embedLinks", "sendMessages"],
+  cooldown: 2e3
+}
+
+# patron.js Handler options. See more at: https://LJNeon.github.io/patron.js/global.html#HandlerOptions
+handler: {}
+
+# patron.js Registry options. See more at: https://LJNeon.github.io/patron.js/global.html#RegistryOptions
+registry: {caseSensitive: false}
+
+# Eris status options. See more at: https://discordapp.com/developers/docs/topics/gateway#activity-object-activity-structure
+status: {
+  name: "!help",
+  type: 1
+}

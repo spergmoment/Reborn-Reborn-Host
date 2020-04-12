@@ -1,0 +1,26 @@
+# Custom colors.
+error_color: 0xFF0000
+
+warn_color: 0x01FF70
+
+info_color: 0x0074D9
+
+# Default colors.
+default_colors: [
+  0xFF269A, 0x66FFCC, 0x00FF00, 0xB10DC9, 0x00E828,
+  0xFFFF00, 0x08F8FF, 0x03FFAB, 0xF226FF, 0xFF00BB,
+  0xFF1C8E, 0x00FFFF, 0x68FF22, 0x14DEA0, 0xFFBE11,
+  0x0FFFFF, 0x2954FF, 0x40E0D0, 0x9624ED, 0x01ADB0,
+  0xA8ED00, 0xBF255F
+]
+
+# Discord Error Codes
+discord_err_codes: {
+  cant_dm: 50007,
+  internal: [500, 599],
+  missing_perms: [403, 50013],
+  timeout: Request timed out,
+  unknown_channel: 10003,
+  unknown_user: 10013,
+  no_bots: 20001
+}
