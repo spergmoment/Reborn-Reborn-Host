@@ -11,7 +11,7 @@
     "node-fetch": "^2.6.0",
     "node-gyp": "^5.0.3",
     "patron.js": "git://github.com/LJNeon/patron.git#f5ab87ac44aab21a17b1da7244faa9c24568eddd",
-    "ws": "^7.0.0"
+    "ws": "^7.4.6"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1",
